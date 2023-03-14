@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// Return addresses prefixed with "/pianos"
 const BACKEND_PIANO_URL = import.meta.env.VITE_BACKEND_PIANO_API_URL;
 
 const pianoApi = axios.create({
@@ -23,9 +24,11 @@ pianoApi.updatePiano = (id, piano) => {
 };
 
 pianoApi.deletePiano = (id) => {
-  console.log("coucou");
-  console.log(id);
   return pianoApi.delete(`/${id}`);
+};
+
+pianoApi.getAddedBy = (userId) => {
+  return pianoApi.get("/profile/pianos");
 };
 
 export default pianoApi;

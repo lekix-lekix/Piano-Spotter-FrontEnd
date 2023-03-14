@@ -8,10 +8,6 @@ body {
   background-color: black;
 }
 
-.App {
-  display: flex;
-  flex-direction: column;
-}
 .logo {
   height: 6em;
   padding: 1.5em;

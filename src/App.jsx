@@ -10,9 +10,10 @@ import QuickBar from "./components/QuickBar/QuickBar";
 import AddPiano from "./components/AddPiano/AddPiano";
 import "./App.css";
 import pianoApi from "./service/piano.service";
+import Profile from "./Pages/Profile/Profile";
 
 function App() {
-  const { isLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, user } = useContext(AuthContext);
   const [quickBarVisible, setQuickBarVisible] = useState(false);
   const [addPianoVisible, setAddPianoVisible] = useState(false);
   const [pianos, setPianos] = useState([]);
@@ -48,6 +49,12 @@ function App() {
     setQuickBarVisible(false);
   };
 
+  // Set everything off
+  const noPopUp = () => {
+    setAddPianoVisible(false);
+    setQuickBarVisible(false);
+  };
+
   // If QuickBar on => else should be off
   useEffect(() => {
     if (quickBarVisible) setAddPianoVisible(false);
@@ -67,8 +74,11 @@ function App() {
         <Route path={"/"} element={<Map {...{ fetchPianos, pianos }} />}>
           <Route path={"/login"} element={<LoginPopUp />} />
           <Route path={"/signup"} element={<SignupPopUp />} />
-          <Route path={"/profile}"} element={<Profile />} />
         </Route>
+        <Route
+          path={"/profile"}
+          element={<Profile noPopUp={noPopUp} user={user} />}
+        />
       </Routes>
     </div>
   );

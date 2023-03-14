@@ -29,12 +29,9 @@ const AuthProviderWrapper = (props) => {
     }
     // If verified, sets the user status to "logged in"
     try {
-      const authResponse = await axios.get(
-        `http://localhost:5005/auth/verify`,
-        {
-          headers: { Authorization: `Bearer ${storedToken}` },
-        }
-      );
+      const authResponse = await authApi.get(`/verify`, {
+        headers: { Authorization: `Bearer ${storedToken}` },
+      });
       const user = authResponse.data;
       setIsLoggedIn(true);
       setIsLoading(true);

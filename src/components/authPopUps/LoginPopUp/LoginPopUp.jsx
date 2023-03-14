@@ -22,7 +22,7 @@ const LoginPopUp = () => {
     try {
       const response = await authApi.login(userToLog);
       storeToken(response.data.authToken);
-      authenticateUser();
+      await authenticateUser();
       console.log("Authenticated!");
     } catch (error) {
       console.log("Authentification error");
