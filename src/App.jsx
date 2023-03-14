@@ -75,10 +75,7 @@ function App() {
           <Route path={"/login"} element={<LoginPopUp />} />
           <Route path={"/signup"} element={<SignupPopUp />} />
         </Route>
-        <Route
-          path={"/profile"}
-          element={<Profile noPopUp={noPopUp} user={user} />}
-        />
+        <Route path={"/profile"} element={<Profile noPopUp={noPopUp} />} />
       </Routes>
     </div>
   );

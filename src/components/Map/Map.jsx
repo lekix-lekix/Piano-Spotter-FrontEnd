@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import pianoApi from "../../service/piano.service";
 
-import "leaflet/dist/leaflet.css";
 import "../../App.css";
 import { Outlet } from "react-router-dom";
 import PianoPopUp from "../PianoPopUp/PianoPopUp";
