@@ -1,35 +1,32 @@
 import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, useMap, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import pianoApi from "../../service/piano.service";
 
 import "leaflet/dist/leaflet.css";
 import "../../App.css";
+import { Outlet } from "react-router-dom";
+import PianoPopUp from "../PianoPopUp/PianoPopUp";
 
-const Map = () => {
-  const [pianos, setPianos] = useState([]);
-
-  // Fetching piano data from the DB
-
-  useEffect(() => {
-    pianoApi
-      .getAllPianos()
-      .then((response) => setPianos(response.data))
-      .catch((error) => console.log(error));
-  }, []);
-
+const Map = (props) => {
   // Adding all markers
 
+  const { fetchPianos, pianos } = props;
+
+  useEffect(() => {
+    fetchPianos();
+  }, []);
+
   const addPianosMarker = () => {
-    if (pianos.length === 0) return <h1>"coucou!"</h1>;
+    if (!pianos.length) return;
     return pianos.map((element) => {
       let { coordinates } = element.location;
       return (
         <Marker key={element._id} position={[coordinates[1], coordinates[0]]}>
-          <Popup>
-            <h3>Piano</h3>
-            <p>Latitude: {coordinates[1]}</p>
-            <p>Longitude: {coordinates[0]}</p>
-          </Popup>
+          <PianoPopUp
+            coordinates={coordinates}
+            pianoId={element._id}
+            pianoState={fetchPianos}
+          />
         </Marker>
       );
     });
@@ -39,7 +36,7 @@ const Map = () => {
     // Generating the map
     <div>
       <MapContainer
-        style={{ width: "100vw", height: "100vh" }}
+        style={{ width: "100vw", height: "90vh" }}
         center={[51.505, -0.09]}
         zoom={13}
         scrollWheelZoom={true}
@@ -48,10 +45,22 @@ const Map = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+
         {addPianosMarker()}
+        <MapClicker />
       </MapContainer>
+
+      <Outlet />
     </div>
   );
 };
 
 export default Map;
+
+function MapClicker() {
+  const map = useMapEvents({
+    click(e) {
+      console.log(e.latlng);
+    },
+  });
+}

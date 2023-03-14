@@ -1,0 +1,26 @@
+.nav-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: black;
+  height: 7vh;
+}
+
+.nav-bar h1 {
+  color: white;
+  margin-left: 2rem;
+}
+.div-links {
+  width: 60rem;
+}
+
+.div-links ul {
+  height: 7vh;
+  display: flex;
+  justify-content: center;
+}
+
+.div-links li {
+  width: 20rem;
+  font-size: 3rem;
+}

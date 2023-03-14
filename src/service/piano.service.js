@@ -23,6 +23,8 @@ pianoApi.updatePiano = (id, piano) => {
 };
 
 pianoApi.deletePiano = (id) => {
+  console.log("coucou");
+  console.log(id);
   return pianoApi.delete(`/${id}`);
 };
 

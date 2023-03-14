@@ -1,0 +1,9 @@
+.quickBar {
+  position: absolute;
+  top: 20%;
+  right: 20%;
+  z-index: 9999;
+  border: 1px solid black;
+  background-color: white;
+  opacity: 80%;
+}
