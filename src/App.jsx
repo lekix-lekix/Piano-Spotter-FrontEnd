@@ -13,7 +13,7 @@ import pianoApi from "./service/piano.service";
 import Profile from "./Pages/Profile/Profile";
 
 function App() {
-  const { isLoggedIn, user } = useContext(AuthContext);
+  const { isLoggedIn } = useContext(AuthContext);
   const [quickBarVisible, setQuickBarVisible] = useState(false);
   const [addPianoVisible, setAddPianoVisible] = useState(false);
   const [pianos, setPianos] = useState([]);
@@ -75,7 +75,10 @@ function App() {
           <Route path={"/login"} element={<LoginPopUp />} />
           <Route path={"/signup"} element={<SignupPopUp />} />
         </Route>
-        <Route path={"/profile"} element={<Profile noPopUp={noPopUp} />} />
+        <Route
+          path={"/profile"}
+          element={<Profile noPopUp={noPopUp} pianos={pianos} />}
+        />
       </Routes>
     </div>
   );

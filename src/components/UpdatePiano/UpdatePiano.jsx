@@ -3,7 +3,7 @@ import { AuthContext } from "../../context/auth.context";
 import "./AddPiano.css";
 import pianoApi from "../../service/piano.service";
 
-const AddPiano = ({ fetchPianos, setQuickBarState }) => {
+const UpdatePiano = ({ fetchPianos, setQuickBarState }) => {
   const { user } = useContext(AuthContext);
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
@@ -65,7 +65,6 @@ const AddPiano = ({ fetchPianos, setQuickBarState }) => {
             onChange={(event) => setLongitude(event.target.value)}
           />
           <input
-            required
             type="number"
             step="0.00001"
             min="-180"

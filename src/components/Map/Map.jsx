@@ -22,9 +22,10 @@ const Map = (props) => {
       return (
         <Marker key={element._id} position={[coordinates[1], coordinates[0]]}>
           <PianoPopUp
+            piano={element}
             coordinates={coordinates}
             pianoId={element._id}
-            pianoState={fetchPianos}
+            fetchPianos={fetchPianos}
           />
         </Marker>
       );

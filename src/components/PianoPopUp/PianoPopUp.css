@@ -1,0 +1,12 @@
+.fav-form {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  height: 5rem;
+}
+
+.fav-form input {
+  padding: 1rem;
+  height: 2rem;
+}
