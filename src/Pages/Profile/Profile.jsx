@@ -12,9 +12,9 @@ const Profile = ({ noPopUp }) => {
   const [name, setName] = useState("");
   const [favId, setFavId] = useState("");
 
-  noPopUp();
   if (!isLoggedIn) return <Navigate to="/login" />;
 
+  useEffect(noPopUp, []);
   const fetchFavouritesData = async () => {
     try {
       if (user) {

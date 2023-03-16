@@ -1,16 +1,27 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/auth.context";
 import "../AddPiano/AddPiano.css";
 import pianoApi from "../../service/piano.service";
 
-const UpdatePiano = ({ fetchPianos, setQuickBarState, onePianoId }) => {
+const UpdatePiano = ({
+  fetchPianos,
+  setQuickBarState,
+  onePianoId,
+  clickCoordinates,
+}) => {
   const { user } = useContext(AuthContext);
-  const [latitude, setLatitude] = useState(0);
-  const [longitude, setLongitude] = useState(0);
+  const [latitude, setLatitude] = useState(clickCoordinates.lat);
+  const [longitude, setLongitude] = useState(clickCoordinates.lng);
   const [pianoType, setPianoType] = useState("");
 
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
+
+  // Refresh data coming from the mapclicker (clickCoordinates)
+  useEffect(() => {
+    setLatitude(clickCoordinates.lat);
+    setLongitude(clickCoordinates.lng);
+  }, [clickCoordinates.lat]);
 
   const checkForErrors = (piano) => {
     if (
@@ -30,51 +41,57 @@ const UpdatePiano = ({ fetchPianos, setQuickBarState, onePianoId }) => {
       try {
         const response = await pianoApi.updatePiano(onePianoId, pianoToUpdate);
         console.log(response);
-        if (response.status === 201) setSuccess(true);
+        if (response.status === 200) {
+          setError("");
+          setSuccess("Piano successfully updated!");
+        }
         await fetchPianos();
       } catch (error) {
         console.log(error);
       }
     } else {
-      setError(true);
+      setError("All fields are required.");
     }
   };
 
   const pianoToUpdate = {
     location: {
       type: "Point",
-      coordinates: [Number(latitude), Number(longitude)],
+      coordinates: [Number(longitude), Number(latitude)],
     },
     pianoType: pianoType,
     addedBy: user._id,
     isVerified: false,
   };
 
+  console.log(error);
+  console.log(success);
   return (
     <div className="addPiano">
-      <h1>Update this piano</h1>
-      <form onSubmit={(event) => handleUpdatePiano(event)}>
-        <label htmlFor="coordinates">
+      <h2>Update this piano</h2>
+      <form
+        className="addPianoForm"
+        onSubmit={(event) => handleUpdatePiano(event)}
+      >
+        <label className="coordinates-label" htmlFor="coordinates">
           Coordinates:
           <input
             type="number"
             step="0.00001"
-            min="-90"
-            max="90"
             placeholder="Latitude"
+            value={clickCoordinates.lat}
             onChange={(event) => setLongitude(event.target.value)}
           />
           <input
             type="number"
             step="0.00001"
-            min="-180"
-            max="180"
             placeholder="Longitude"
+            value={clickCoordinates.lng}
             onChange={(event) => setLatitude(event.target.value)}
           />
         </label>
 
-        <label htmlFor="piano-type">
+        <label className="digital-inputs" htmlFor="piano-type">
           Piano Type:
           <label name="Grand">
             Grand Piano
@@ -104,11 +121,11 @@ const UpdatePiano = ({ fetchPianos, setQuickBarState, onePianoId }) => {
             />
           </label>
         </label>
-        <button>Submit Piano</button>
+        <button>Update Piano</button>
       </form>
-      {success && <p>Piano successfully updated !</p>}
-      {error && <p style={{ color: "red" }}>All fields are required.</p>}
       <button onClick={() => setQuickBarState()}>EXIT</button>
+      {success && <p>{success}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 };

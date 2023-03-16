@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 
 import "../../App.css";
@@ -6,10 +6,10 @@ import { Outlet } from "react-router-dom";
 import PianoPopUp from "../PianoPopUp/PianoPopUp";
 
 const Map = (props) => {
+  const { fetchPianos, pianos, setUpdatePianoState, handleClickCoordinates } =
+    props;
+
   // Adding all markers
-
-  const { fetchPianos, pianos, setUpdatePianoState } = props;
-
   useEffect(() => {
     fetchPianos();
   }, []);
@@ -19,7 +19,7 @@ const Map = (props) => {
 
     return pianos.map((element) => {
       let { coordinates } = element.location;
-      if (coordinates === undefined) return;
+      if (coordinates === undefined || coordinates === null) return;
 
       return (
         <Marker key={element._id} position={[coordinates[1], coordinates[0]]}>
@@ -34,6 +34,17 @@ const Map = (props) => {
       );
     });
   };
+
+  function MapClicker() {
+    const map = useMapEvents({
+      click(e) {
+        if (e.latlng) {
+          handleClickCoordinates(e.latlng);
+          console.log(e.latlng);
+        }
+      },
+    });
+  }
 
   return (
     // Generating the map
@@ -59,11 +70,3 @@ const Map = (props) => {
 };
 
 export default Map;
-
-function MapClicker() {
-  const map = useMapEvents({
-    click(e) {
-      console.log(e.latlng);
-    },
-  });
-}

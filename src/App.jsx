@@ -21,6 +21,7 @@ function App() {
   const [addPianoVisible, setAddPianoVisible] = useState(false);
   const [updatePianoVisible, setUpdatePianoVisible] = useState(false);
   const [onePianoId, setOnePianoId] = useState("");
+  const [clickCoordinates, setClickCoordinates] = useState([]);
 
   // Fetching piano data from the DB at the higher level of the app, to pass the function as props and refresh data when adding / removing piano
   function fetchPianos() {
@@ -53,17 +54,19 @@ function App() {
     setQuickBarVisible(false);
   };
 
-  // UpdatePiano on / off
+  // UpdatePiano on / off (also getting one piano ID from )
   const setUpdatePianoState = (pianoId) => {
     setOnePianoId(pianoId);
     setUpdatePianoVisible(true);
     setQuickBarVisible(false);
+    setAddPianoVisible(false);
   };
 
   // Set everything off
   const noPopUp = () => {
     setAddPianoVisible(false);
     setQuickBarVisible(false);
+    setUpdatePianoVisible(false);
   };
 
   // If QuickBar on => else should be off
@@ -74,6 +77,11 @@ function App() {
     }
   }, [quickBarVisible]);
 
+  // Handling click coordinates
+  const handleClickCoordinates = (latlong) => {
+    setClickCoordinates(latlong);
+  };
+
   return (
     <div className="App">
       <NavBar function={setQuickBarState} />
@@ -82,6 +90,7 @@ function App() {
         <AddPiano
           fetchPianos={fetchPianos}
           setQuickBarState={setQuickBarState}
+          clickCoordinates={clickCoordinates}
         />
       )}
       {updatePianoVisible && (
@@ -89,12 +98,22 @@ function App() {
           fetchPianos={fetchPianos}
           setQuickBarState={setQuickBarState}
           onePianoId={onePianoId}
+          clickCoordinates={clickCoordinates}
         />
       )}
       <Routes>
         <Route
           path={"/"}
-          element={<Map {...{ fetchPianos, pianos, setUpdatePianoState }} />}
+          element={
+            <Map
+              {...{
+                fetchPianos,
+                pianos,
+                setUpdatePianoState,
+                handleClickCoordinates,
+              }}
+            />
+          }
         >
           <Route path={"/login"} element={<LoginPopUp />} />
           <Route path={"/signup"} element={<SignupPopUp />} />

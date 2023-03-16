@@ -1,17 +1,24 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/auth.context";
 import "./AddPiano.css";
 import pianoApi from "../../service/piano.service";
 
-const AddPiano = ({ fetchPianos, setQuickBarState }) => {
+const AddPiano = ({ fetchPianos, setQuickBarState, clickCoordinates }) => {
   const { user } = useContext(AuthContext);
-  const [latitude, setLatitude] = useState(0);
-  const [longitude, setLongitude] = useState(0);
+  const [latitude, setLatitude] = useState(clickCoordinates.lat);
+  const [longitude, setLongitude] = useState(clickCoordinates.lng);
   const [pianoType, setPianoType] = useState("");
 
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
 
+  // Refresh data coming from the mapclicker (clickCoordinates)
+  useEffect(() => {
+    setLatitude(clickCoordinates.lat);
+    setLongitude(clickCoordinates.lng);
+  }, [clickCoordinates.lat]);
+
+  // Check for field missing
   const checkForErrors = (piano) => {
     if (
       (piano.location.coordinates[0] === 0 &&
@@ -24,26 +31,30 @@ const AddPiano = ({ fetchPianos, setQuickBarState }) => {
     }
   };
 
+  // Sending piano details to api for DB creation
   const handleAddPiano = async (event) => {
     event.preventDefault();
     if (!checkForErrors(pianoToCreate)) {
       try {
         const response = await pianoApi.createPiano(pianoToCreate);
         console.log(response);
-        if (response.status === 201) setSuccess(true);
-        fetchPianos();
+        if (response.status === 201) {
+          setError("");
+          setSuccess("Piano successfully created!");
+        }
+        await fetchPianos();
       } catch (error) {
         console.log(error);
       }
     } else {
-      setError(true);
+      setError("All fields are required");
     }
   };
 
   const pianoToCreate = {
     location: {
       type: "Point",
-      coordinates: [Number(latitude), Number(longitude)],
+      coordinates: [Number(longitude), Number(latitude)],
     },
     pianoType: pianoType,
     addedBy: user._id,
@@ -52,64 +63,73 @@ const AddPiano = ({ fetchPianos, setQuickBarState }) => {
 
   return (
     <div className="addPiano">
-      <h1>Add a piano</h1>
-      <form onSubmit={(event) => handleAddPiano(event)}>
-        <label htmlFor="coordinates">
+      <h2>Add a piano</h2>
+      <form
+        className="addPianoForm"
+        onSubmit={(event) => handleAddPiano(event)}
+      >
+        <label className="coordinates-label" htmlFor="coordinates">
           Coordinates:
           <input
             type="number"
             step="0.00001"
-            min="-90"
-            max="90"
             placeholder="Latitude"
+            value={clickCoordinates.lat}
             onChange={(event) => setLongitude(event.target.value)}
           />
           <input
             required
             type="number"
             step="0.00001"
-            min="-180"
-            max="180"
             placeholder="Longitude"
+            value={clickCoordinates.lng}
             onChange={(event) => setLatitude(event.target.value)}
           />
         </label>
 
-        <label htmlFor="piano-type">
+        <label className="digital-inputs" htmlFor="piano-type">
           Piano Type:
-          <label name="Grand">
-            Grand Piano
-            <input
-              type="radio"
-              value="Grand"
-              name="pianoType"
-              onChange={(event) => setPianoType(event.target.value)}
-            />
-          </label>
-          <label htmlFor="upright">
-            Upright
-            <input
-              type="radio"
-              value="Upright"
-              name="pianoType"
-              onChange={(event) => setPianoType(event.target.value)}
-            />
-          </label>
-          <label htmlFor="digital">
-            Digital
-            <input
-              type="radio"
-              value="Digital"
-              name="pianoType"
-              onChange={(event) => setPianoType(event.target.value)}
-            />
-          </label>
+          <ul>
+            <li>
+              <label name="Grand">
+                Grand Piano
+                <input
+                  type="radio"
+                  value="Grand"
+                  name="pianoType"
+                  onChange={(event) => setPianoType(event.target.value)}
+                />
+              </label>
+            </li>
+            <li>
+              <label htmlFor="upright">
+                Upright
+                <input
+                  type="radio"
+                  value="Upright"
+                  name="pianoType"
+                  onChange={(event) => setPianoType(event.target.value)}
+                />
+              </label>
+            </li>
+            <li>
+              <label htmlFor="digital">
+                Digital
+                <input
+                  type="radio"
+                  value="Digital"
+                  name="pianoType"
+                  onChange={(event) => setPianoType(event.target.value)}
+                />
+              </label>
+            </li>
+          </ul>
         </label>
         <button>Submit Piano</button>
       </form>
-      {success && <p>Piano successfully created !</p>}
-      {error && <p style={{ color: "red" }}>All fields are required.</p>}
       <button onClick={() => setQuickBarState()}>EXIT</button>
+      {success && <p>{success}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 };
