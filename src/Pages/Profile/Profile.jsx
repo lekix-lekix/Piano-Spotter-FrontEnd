@@ -80,7 +80,7 @@ const Profile = ({ noPopUp }) => {
   if (!user) return <Navigate to="/" />;
 
   return (
-    <div>
+    <div className="profile-div">
       <h1>Hello {user.username}!</h1>
       <h2>Your personal information :</h2>
       <p>E-mail: {user.email}</p>
@@ -88,9 +88,6 @@ const Profile = ({ noPopUp }) => {
         <p>Change e-mail ?</p>
       </Link>
       <Link>Change password ?</Link>
-      <div>
-        <h3>Pianos that you have added :</h3>
-      </div>
       <div>
         <h3>Your favourite pianos :</h3>
         <div className="favCardContainer">

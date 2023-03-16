@@ -4,11 +4,15 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
-  height: 22rem;
+  height: 25rem;
   background-color: white;
   border: 1px solid black;
   border-radius: 5%;
   opacity: 90%;
+}
+
+.form-popup button {
+  margin: 1rem;
 }
 
 .form-popup form {

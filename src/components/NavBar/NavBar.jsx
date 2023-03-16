@@ -3,9 +3,8 @@ import { Link, Navigate } from "react-router-dom";
 import "./NavBar.css";
 import { AuthContext } from "../../context/auth.context";
 
-const NavBar = (props) => {
+const NavBar = ({ setQuickBarState, setWelcomeMessageState }) => {
   const { isLoggedIn, logOutUser } = useContext(AuthContext);
-  const setQuickBarState = props.function;
 
   const logOutAndNavigate = () => {
     logOutUser();
@@ -18,6 +17,9 @@ const NavBar = (props) => {
       </Link>
       <div className="div-links">
         <ul>
+          <Link onClick={setWelcomeMessageState}>
+            <li>About</li>
+          </Link>
           {!isLoggedIn && (
             <>
               <Link to="/login">
@@ -38,7 +40,7 @@ const NavBar = (props) => {
                 <li>QuickBar</li>
               </Link>
               <Link onClick={logOutAndNavigate}>
-                <li>Sign out</li>
+                <li className="sign-out">Sign out</li>
               </Link>
             </>
           )}

@@ -2,13 +2,21 @@ body {
   background-color: white;
 }
 
+.profile-div {
+  margin-top: 5rem;
+}
+
+.profile-div h1 {
+  margin-bottom: 1rem;
+}
+
 .favCardContainer {
   display: flex;
-
   justify-content: center;
 }
 .favCard {
   padding: 1rem;
   margin: 1rem;
   border: 1px solid black;
+  border-radius: 5px;
 }

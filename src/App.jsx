@@ -15,6 +15,7 @@ import pianoApi from "./service/piano.service";
 import Profile from "./Pages/Profile/Profile";
 import NotFound from "./Pages/NotFound/NotFound";
 import "./App.css";
+import Welcome from "./components/Welcome/Welcome";
 
 function App() {
   const { isLoggedIn } = useContext(AuthContext);
@@ -23,6 +24,7 @@ function App() {
   const [quickBarVisible, setQuickBarVisible] = useState(false);
   const [addPianoVisible, setAddPianoVisible] = useState(false);
   const [updatePianoVisible, setUpdatePianoVisible] = useState(false);
+  const [aboutMessageVisible, setAboutMessageVisible] = useState(true);
 
   const [onePianoId, setOnePianoId] = useState("");
   const [clickCoordinates, setClickCoordinates] = useState([]);
@@ -40,6 +42,11 @@ function App() {
   }, []);
 
   // Displaying the different components //
+
+  // Welcome message on / off
+  const setWelcomeMessageState = () => {
+    setAboutMessageVisible(!aboutMessageVisible);
+  };
 
   // Quickbar on / off
   const setQuickBarState = () => {
@@ -71,6 +78,7 @@ function App() {
     setAddPianoVisible(false);
     setQuickBarVisible(false);
     setUpdatePianoVisible(false);
+    setAboutMessageVisible(false);
   };
 
   // If QuickBar on => else should be off
@@ -88,7 +96,13 @@ function App() {
 
   return (
     <div className="App">
-      <NavBar function={setQuickBarState} />
+      <NavBar
+        setQuickBarState={setQuickBarState}
+        setWelcomeMessageState={setWelcomeMessageState}
+      />
+      {aboutMessageVisible && (
+        <Welcome setWelcomeMessageState={setWelcomeMessageState} />
+      )}
       {quickBarVisible && <QuickBar setAddPianoState={setAddPianoState} />}
       {addPianoVisible && (
         <AddPiano

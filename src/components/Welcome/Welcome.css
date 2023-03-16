@@ -1,0 +1,16 @@
+.welcome {
+  position: absolute;
+  padding: 1rem;
+  z-index: 9999;
+  top: 20%;
+  left: 5%;
+  width: 20rem;
+  background-color: white;
+  opacity: 90%;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.welcome h2 {
+  padding-bottom: 1rem;
+}

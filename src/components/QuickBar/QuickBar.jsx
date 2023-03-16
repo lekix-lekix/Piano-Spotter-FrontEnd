@@ -17,7 +17,9 @@ const QuickBar = ({ setAddPianoState }) => {
           <li>Add a piano</li>
         </Link>
         <Link>
-          <li>Favourite pianos</li>
+          <Link to="/profile">
+            <li>Favourite pianos</li>
+          </Link>
         </Link>
         <li></li>
       </ul>

@@ -2,14 +2,18 @@
   display: flex;
   flex-direction: row;
   align-self: flex-start;
+  text-align: center;
   justify-content: space-between;
   background-color: black;
-  height: 7vh;
+  height: 8vh;
+  width: 100vw;
 }
 
 .nav-bar h1 {
   color: white;
   margin-left: 2rem;
+  margin-top: 0.5rem;
+  font-family: "Palanquin Dark";
 }
 .div-links {
   width: 60rem;
@@ -22,6 +26,10 @@
 }
 
 .div-links li {
-  width: 20rem;
   font-size: 3rem;
+  margin-right: 2rem;
 }
+
+/* .sign-out {
+  margin-right: 20rem;
+} */

@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import authApi from "../../../service/auth.service";
-import "../AuthPopUps.css";
+import "./Signup.css";
 
 const SignupPopUp = () => {
   const [username, setUsername] = useState("");
@@ -51,12 +51,14 @@ const SignupPopUp = () => {
         <label htmlFor="password">Password:</label>
         <input
           className="log-form-input"
-          type="text"
+          type="password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />
         <button>Sign up !</button>
-        <Link to="/">Exit</Link>
+        <Link to="/">
+          <button>Exit</button>
+        </Link>
       </form>
     </div>
   );
