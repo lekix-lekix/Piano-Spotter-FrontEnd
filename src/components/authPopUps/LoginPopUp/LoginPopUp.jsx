@@ -30,7 +30,6 @@ const LoginPopUp = () => {
 
     setEmail("");
     setPassword("");
-    // console.log(userToLog);
   };
 
   return (
@@ -39,6 +38,7 @@ const LoginPopUp = () => {
       <form onSubmit={(event) => handleSubmit(event)}>
         <label htmlFor="email">E-mail:</label>
         <input
+          className="log-form-input"
           type="text"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
@@ -46,7 +46,8 @@ const LoginPopUp = () => {
 
         <label htmlFor="password">Password:</label>
         <input
-          type="text"
+          type="password"
+          className="log-form-input"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />

@@ -1,10 +1,12 @@
 import axios from "axios";
+import getToken from "./getToken.service";
 
 // Return addresses prefixed with "/pianos"
 const BACKEND_PIANO_URL = import.meta.env.VITE_BACKEND_PIANO_API_URL;
 
 const pianoApi = axios.create({
   baseURL: BACKEND_PIANO_URL,
+  headers: { Authorization: `Bearer ${getToken()}` },
 });
 
 pianoApi.getAllPianos = () => {

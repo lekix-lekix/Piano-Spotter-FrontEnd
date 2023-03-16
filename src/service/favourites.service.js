@@ -16,7 +16,7 @@ favouritesApi.createFavourite = (fav) => {
 };
 
 favouritesApi.updateFavName = (favId, newName) => {
-  return favouritesApi.patch(`/${favId}`, newName);
+  return favouritesApi.patch(`/${favId}`, { newName });
 };
 
 favouritesApi.deleteFav = (favId) => {

@@ -7,7 +7,7 @@ import "./PianoPopUp.css";
 
 const PianoPopUp = (props) => {
   const { isLoggedIn, user } = useContext(AuthContext);
-  const { coordinates, fetchPianos, piano } = props;
+  const { coordinates, fetchPianos, piano, setUpdatePianoState } = props;
 
   const [favName, setFavName] = useState("");
   const [showFavForm, setShowFavForm] = useState(false);
@@ -15,10 +15,13 @@ const PianoPopUp = (props) => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
-  if (!user) return <div></div>;
-
   let addedByUser = false;
-  if (piano.addedBy === user._id) addedByUser = true;
+
+  if (user) {
+    if (piano.addedBy === user._id) {
+      addedByUser = true;
+    }
+  }
 
   const handleDelete = async () => {
     try {
@@ -42,7 +45,7 @@ const PianoPopUp = (props) => {
       userId: user._id,
     };
     try {
-      const response = await favouritesApi.createFavourite(fav);
+      await favouritesApi.createFavourite(fav);
       setSuccess("Piano successfully added to favourites!");
     } catch (error) {
       if (error.response.status === 409) {
@@ -72,7 +75,6 @@ const PianoPopUp = (props) => {
         <h3>Piano</h3>
         <p>Latitude: {coordinates[1]}</p>
         <p>Longitude: {coordinates[0]}</p>
-
         {isLoggedIn && (
           <button
             style={{ color: "green" }}
@@ -101,12 +103,17 @@ const PianoPopUp = (props) => {
 
         {isLoggedInAndAddedByUser() && (
           <div>
-            {error && error(<p style={{ color: "red" }}>{error}</p>)}
+            {error && <p style={{ color: "red" }}>{error}</p>}
             <div>
               <button style={{ color: "red" }} onClick={() => handleDelete()}>
                 DELETE
               </button>
-              <button style={{ color: "orange" }}>UPDATE</button>
+              <button
+                style={{ color: "orange" }}
+                onClick={() => setUpdatePianoState(piano._id)}
+              >
+                UPDATE
+              </button>
             </div>
           </div>
         )}

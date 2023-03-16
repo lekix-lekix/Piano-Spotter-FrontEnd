@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
-import pianoApi from "../../service/piano.service";
 
 import "../../App.css";
 import { Outlet } from "react-router-dom";
@@ -9,7 +8,7 @@ import PianoPopUp from "../PianoPopUp/PianoPopUp";
 const Map = (props) => {
   // Adding all markers
 
-  const { fetchPianos, pianos } = props;
+  const { fetchPianos, pianos, setUpdatePianoState } = props;
 
   useEffect(() => {
     fetchPianos();
@@ -17,8 +16,11 @@ const Map = (props) => {
 
   const addPianosMarker = () => {
     if (!pianos.length) return;
+
     return pianos.map((element) => {
       let { coordinates } = element.location;
+      if (coordinates === undefined) return;
+
       return (
         <Marker key={element._id} position={[coordinates[1], coordinates[0]]}>
           <PianoPopUp
@@ -26,6 +28,7 @@ const Map = (props) => {
             coordinates={coordinates}
             pianoId={element._id}
             fetchPianos={fetchPianos}
+            setUpdatePianoState={setUpdatePianoState}
           />
         </Marker>
       );
@@ -37,7 +40,7 @@ const Map = (props) => {
     <div>
       <MapContainer
         style={{ width: "100vw", height: "90vh" }}
-        center={[51.505, -0.09]}
+        center={[48.8566, 2.3522]}
         zoom={13}
         scrollWheelZoom={true}
       >

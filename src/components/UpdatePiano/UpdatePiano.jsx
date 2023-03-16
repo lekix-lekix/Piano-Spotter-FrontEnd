@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../../context/auth.context";
-import "./AddPiano.css";
+import "../AddPiano/AddPiano.css";
 import pianoApi from "../../service/piano.service";
 
-const UpdatePiano = ({ fetchPianos, setQuickBarState }) => {
+const UpdatePiano = ({ fetchPianos, setQuickBarState, onePianoId }) => {
   const { user } = useContext(AuthContext);
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
@@ -24,14 +24,14 @@ const UpdatePiano = ({ fetchPianos, setQuickBarState }) => {
     }
   };
 
-  const handleAddPiano = async (event) => {
+  const handleUpdatePiano = async (event) => {
     event.preventDefault();
-    if (!checkForErrors(pianoToCreate)) {
+    if (!checkForErrors(pianoToUpdate)) {
       try {
-        const response = await pianoApi.createPiano(pianoToCreate);
+        const response = await pianoApi.updatePiano(onePianoId, pianoToUpdate);
         console.log(response);
         if (response.status === 201) setSuccess(true);
-        fetchPianos();
+        await fetchPianos();
       } catch (error) {
         console.log(error);
       }
@@ -40,7 +40,7 @@ const UpdatePiano = ({ fetchPianos, setQuickBarState }) => {
     }
   };
 
-  const pianoToCreate = {
+  const pianoToUpdate = {
     location: {
       type: "Point",
       coordinates: [Number(latitude), Number(longitude)],
@@ -52,8 +52,8 @@ const UpdatePiano = ({ fetchPianos, setQuickBarState }) => {
 
   return (
     <div className="addPiano">
-      <h1>Add a piano</h1>
-      <form onSubmit={(event) => handleAddPiano(event)}>
+      <h1>Update this piano</h1>
+      <form onSubmit={(event) => handleUpdatePiano(event)}>
         <label htmlFor="coordinates">
           Coordinates:
           <input
@@ -106,11 +106,11 @@ const UpdatePiano = ({ fetchPianos, setQuickBarState }) => {
         </label>
         <button>Submit Piano</button>
       </form>
-      {success && <p>Piano successfully created !</p>}
+      {success && <p>Piano successfully updated !</p>}
       {error && <p style={{ color: "red" }}>All fields are required.</p>}
       <button onClick={() => setQuickBarState()}>EXIT</button>
     </div>
   );
 };
 
-export default AddPiano;
+export default UpdatePiano;

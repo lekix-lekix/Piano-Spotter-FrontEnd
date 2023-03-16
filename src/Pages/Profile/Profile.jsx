@@ -1,13 +1,19 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { AuthContext } from "../../context/auth.context";
 import favouritesApi from "../../service/favourites.service";
 import "./Profile.css";
 
 const Profile = ({ noPopUp }) => {
-  const { user } = useContext(AuthContext);
+  const { user, isLoggedIn } = useContext(AuthContext);
   const [favourites, setFavourites] = useState([]);
+
+  const [showNameForm, setShowNameForm] = useState(false);
+  const [name, setName] = useState("");
+  const [favId, setFavId] = useState("");
+
   noPopUp();
+  if (!isLoggedIn) return <Navigate to="/login" />;
 
   const fetchFavouritesData = async () => {
     try {
@@ -29,6 +35,45 @@ const Profile = ({ noPopUp }) => {
       console.log(error);
     }
   };
+
+  const handleNameForm = (event) => {
+    setName(event.target.value);
+  };
+
+  const toggleNameForm = (favId) => {
+    setShowNameForm(true);
+    setFavId(favId);
+  };
+
+  const handleUpdateFavName = async (event) => {
+    event.preventDefault();
+    try {
+      console.log(name);
+      await favouritesApi.updateFavName(favId, name);
+      fetchFavouritesData();
+      setShowNameForm();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const returnNameForm = () => {
+    return (
+      <form
+        className="name-form"
+        onSubmit={(event) => handleUpdateFavName(event)}
+      >
+        <input
+          type="text"
+          value={name}
+          onChange={handleNameForm}
+          placeholder="Favourite name"
+        />
+        <button>Update name</button>
+      </form>
+    );
+  };
+
   useEffect(() => {
     fetchFavouritesData();
   }, [user]);
@@ -65,11 +110,17 @@ const Profile = ({ noPopUp }) => {
                     >
                       Delete
                     </button>
-                    <button style={{ color: "orange" }}>Update</button>
+                    <button
+                      onClick={() => toggleNameForm(fav._id)}
+                      style={{ color: "orange" }}
+                    >
+                      Update
+                    </button>
                   </div>
                 );
             })}
         </div>
+        {showNameForm && returnNameForm()}
       </div>
     </div>
   );
