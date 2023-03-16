@@ -64,8 +64,6 @@ const UpdatePiano = ({
     isVerified: false,
   };
 
-  console.log(error);
-  console.log(success);
   return (
     <div className="addPiano">
       <h2>Update this piano</h2>

@@ -8,10 +8,13 @@ import LoginPopUp from "./components/authPopUps/LoginPopUp/LoginPopUp";
 import SignupPopUp from "./components/authPopUps/SignupPopUp/Signup";
 import QuickBar from "./components/QuickBar/QuickBar";
 import AddPiano from "./components/AddPiano/AddPiano";
-import "./App.css";
-import pianoApi from "./service/piano.service";
-import Profile from "./Pages/Profile/Profile";
 import UpdatePiano from "./components/UpdatePiano/UpdatePiano";
+
+import pianoApi from "./service/piano.service";
+
+import Profile from "./Pages/Profile/Profile";
+import NotFound from "./Pages/NotFound/NotFound";
+import "./App.css";
 
 function App() {
   const { isLoggedIn } = useContext(AuthContext);
@@ -20,6 +23,7 @@ function App() {
   const [quickBarVisible, setQuickBarVisible] = useState(false);
   const [addPianoVisible, setAddPianoVisible] = useState(false);
   const [updatePianoVisible, setUpdatePianoVisible] = useState(false);
+
   const [onePianoId, setOnePianoId] = useState("");
   const [clickCoordinates, setClickCoordinates] = useState([]);
 
@@ -122,6 +126,7 @@ function App() {
           path={"/profile"}
           element={<Profile noPopUp={noPopUp} pianos={pianos} />}
         />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );

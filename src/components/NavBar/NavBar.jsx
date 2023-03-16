@@ -1,11 +1,15 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import "./NavBar.css";
 import { AuthContext } from "../../context/auth.context";
 
 const NavBar = (props) => {
   const { isLoggedIn, logOutUser } = useContext(AuthContext);
   const setQuickBarState = props.function;
+
+  const logOutAndNavigate = () => {
+    logOutUser();
+  };
 
   return (
     <nav className="nav-bar">
@@ -33,7 +37,7 @@ const NavBar = (props) => {
               <Link onClick={setQuickBarState}>
                 <li>QuickBar</li>
               </Link>
-              <Link onClick={logOutUser}>
+              <Link onClick={logOutAndNavigate}>
                 <li>Sign out</li>
               </Link>
             </>

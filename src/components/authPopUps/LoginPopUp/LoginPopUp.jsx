@@ -8,6 +8,7 @@ const LoginPopUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { isLoggedIn } = useContext(AuthContext);
+  const [error, setError] = useState("");
 
   const { storeToken, authenticateUser } = useContext(AuthContext);
 
@@ -25,7 +26,8 @@ const LoginPopUp = () => {
       await authenticateUser();
       console.log("Authenticated!");
     } catch (error) {
-      console.log("Authentification error");
+      console.log(error);
+      setError("Authentification error");
     }
 
     setEmail("");
@@ -53,6 +55,7 @@ const LoginPopUp = () => {
         />
         <button>Log In !</button>
         <Link to="/">Exit</Link>
+        {error && <p style={{ color: "red" }}>{error}</p>}
         {isLoggedIn && <Navigate to="/" />}
       </form>
     </div>
