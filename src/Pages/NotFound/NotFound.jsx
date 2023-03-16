@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
 
-const NotFound = () => {
+const NotFound = ({ noPopUp }) => {
+  useEffect(noPopUp, []);
+
   return (
     <div>
       <h1>ERROR 404</h1>

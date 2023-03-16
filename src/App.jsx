@@ -126,7 +126,7 @@ function App() {
           path={"/profile"}
           element={<Profile noPopUp={noPopUp} pianos={pianos} />}
         />
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={<NotFound noPopUp={noPopUp} />} />
       </Routes>
     </div>
   );
