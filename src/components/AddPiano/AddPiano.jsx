@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/auth.context";
 import "./AddPiano.css";
 import pianoApi from "../../service/piano.service";
+import { Navigate } from "react-router-dom";
 
 const AddPiano = ({ fetchPianos, setQuickBarState, clickCoordinates }) => {
   const { user } = useContext(AuthContext);
@@ -34,6 +35,17 @@ const AddPiano = ({ fetchPianos, setQuickBarState, clickCoordinates }) => {
   // Sending piano details to api for DB creation
   const handleAddPiano = async (event) => {
     event.preventDefault();
+
+    const pianoToCreate = {
+      location: {
+        type: "Point",
+        coordinates: [Number(longitude), Number(latitude)],
+      },
+      pianoType: pianoType,
+      addedBy: user._id,
+      isVerified: false,
+    };
+
     if (!checkForErrors(pianoToCreate)) {
       try {
         const response = await pianoApi.createPiano(pianoToCreate);
@@ -49,16 +61,6 @@ const AddPiano = ({ fetchPianos, setQuickBarState, clickCoordinates }) => {
     } else {
       setError("All fields are required");
     }
-  };
-
-  const pianoToCreate = {
-    location: {
-      type: "Point",
-      coordinates: [Number(longitude), Number(latitude)],
-    },
-    pianoType: pianoType,
-    addedBy: user._id,
-    isVerified: false,
   };
 
   return (

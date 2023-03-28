@@ -9,6 +9,19 @@ const pianoApi = axios.create({
   headers: { Authorization: `Bearer ${getToken()}` },
 });
 
+// Intercepts requests and attach auth token to it
+axios.interceptors.request.use(
+  (config) => {
+    const token = getToken();
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+  },
+  (error) => {
+    console.log(error);
+  }
+);
+
 pianoApi.getAllPianos = () => {
   return pianoApi.get("/");
 };
